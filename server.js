@@ -5,7 +5,7 @@ import fs from 'fs';
 
 const app = express();
 const PORT = 3000;
-const BOT_TOKEN = 'YOUR_TELEGRAM_BOT_TOKEN'; // Hardcoded Token
+const BOT_TOKEN = '8191149688:AAGfW3CJFUEnG4kaXfkRyb_fH6yJ1Awe-gk'; // Hardcoded Token
 
 let users = [];
 let withdrawals = [];
