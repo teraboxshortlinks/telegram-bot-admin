@@ -483,7 +483,7 @@
         function copyReferralCode() {navigator.clipboard.writeText(document.getElementById('referral-code').textContent).then(() => showAlert("Referral code copied!"));}
         
         function shareReferralCode() {
-            const botUsername = "YourTelegramBot"; // <-- IMPORTANT: REPLACE THIS
+            const botUsername = "DailyearnmoneyPro"; // <-- IMPORTANT: REPLACE THIS
             const botUrl = `https://t.me/${botUsername}?start=${userData.referralCode}`; 
             const text = `Join Daily earn money Pro and earn money! Start our bot to get a bonus: ${botUrl}`;
             if (navigator.share) {
