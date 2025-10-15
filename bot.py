@@ -10,9 +10,9 @@ logger = logging.getLogger(__name__)
 
 # --- অনুগ্রহ করে এই অংশগুলো পরিবর্তন করুন ---
 # BotFather থেকে পাওয়া আপনার টেলিগ্রাম বটের টোকেনটি এখানে বসান
-BOT_TOKEN = "YOUR_BOT_TOKEN" 
+BOT_TOKEN = "8191149688:AAFHRNg664tx6yt9mCYCFX9L6_ytpRgl9Tw" 
 # আপনার মিনি অ্যাপের (ওয়েবসাইট) URL
-WEB_APP_URL = "https://fb-erning-bot.vercel.app/" 
+WEB_APP_URL = "https://onlinetakaincome.vercel.app/" 
 # ------------------------------------------
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -58,6 +58,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-```
-
----
