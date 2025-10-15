@@ -24,6 +24,7 @@
         .btn:active, .btn-accent:active, .btn-outline-accent:active { transform: scale(0.95); }
         .btn:disabled { cursor: not-allowed; opacity: 0.6; }
         .btn-accent { background-color: #ff8c00; color: #121212; font-weight: bold; }
+        .btn-telegram { background-color: #54A9EB; color: white; font-weight: bold; }
         .input-field { background-color: #2c2c2c; border: 1px solid #444; }
         .input-field[readonly] { background-color: #3a3a3a; color: #a0a0a0; cursor: not-allowed; }
         .main-page { display: none; }
@@ -54,8 +55,13 @@
             <div id="login-view">
                 <input id="login-email" type="email" placeholder="Email" class="w-full p-3 rounded-lg input-field mb-4">
                 <input id="login-password" type="password" placeholder="Password" class="w-full p-3 rounded-lg input-field mb-4">
-                <button id="login-btn" class="w-full p-3 rounded-lg btn-accent mb-4">Login</button>
-                <p class="text-center text-gray-400">Don't have an account? <a href="#" id="show-signup" class="font-semibold text-accent">Sign Up</a></p>
+                <button id="login-btn" class="w-full p-3 rounded-lg btn-accent mb-4">Login with Email</button>
+                <div class="my-4 flex items-center"><div class="flex-grow border-t border-gray-600"></div><span class="px-3 text-gray-400">OR</span><div class="flex-grow border-t border-gray-600"></div></div>
+                <button id="telegram-login-btn" class="w-full p-3 rounded-lg btn-telegram flex items-center justify-center space-x-2">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.58c-.28 1.13-1.04 1.4-1.74.88L14.25 16l-4.12 3.9c-.78.76-1.36.37-1.55-.55z"></path></svg>
+                    <span>Login with Telegram</span>
+                </button>
+                <p class="text-center text-gray-400 mt-4">Don't have an account? <a href="#" id="show-signup" class="font-semibold text-accent">Sign Up</a></p>
             </div>
             <div id="signup-view" class="hidden">
                  <input id="signup-name" type="text" placeholder="Full Name" class="w-full p-3 rounded-lg input-field mb-4">
@@ -124,32 +130,32 @@
             }
         };
 
-        async function handleTelegramAuth() {
+        function handleTelegramAuth() {
             const tg = window.Telegram.WebApp;
             tg.ready();
             loader.style.display = 'flex';
-            try {
-                const response = await fetch('/api/auth', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ initData: tg.initData })
-                });
-
+            
+            fetch('/api/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ initData: tg.initData })
+            })
+            .then(response => {
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to get auth token.');
+                    return response.json().then(err => { throw new Error(err.error || 'Failed to get auth token.')});
                 }
-
-                const { token } = await response.json();
-                if (token) {
-                    await signInWithCustomToken(auth, token);
-                    // onAuthStateChanged will now be triggered
+                return response.json();
+            })
+            .then(data => {
+                if (data.token) {
+                    return signInWithCustomToken(auth, data.token);
                 } else {
                     throw new Error('Token not received from server.');
                 }
-            } catch (error) {
+            })
+            .catch(error => {
                 showFatalError("Telegram auto-login failed.", error);
-            }
+            });
         }
         
         function showFatalError(message, error) {
@@ -165,10 +171,7 @@
                     currentUser = user;
                     
                     await fetchAppConfig();
-                    if (!appConfig) throw new Error("Could not fetch app configuration.");
-
                     await fetchUserData();
-                    if (!userData) throw new Error("Could not fetch user data.");
 
                     if (userData.isBlocked) {
                         showAlert("Your account has been blocked.");
@@ -187,7 +190,7 @@
                     navigateTo('home-page');
                     
                     if(!sessionStorage.getItem('welcomeShown')) {
-                        const welcomeMessage = `Welcome!\n🔥\nAssalamu Alaikum, I am paying honestly. If you work according to the rules, you will get 100% payment, InshaAllah 🔥\n\n⚡ Joint Bonus: 30 Taka\n💸 Per Referral: 40 Taka\n💰 Per Ad: 5 Taka\n💖 Opportunity to watch 10 ads every day\n♨️ No need to invest on this site, you can earn completely free, thank you.\n\n📌 100% payment guarantee\n😊 Bkash, Nagad\n\n~ Do not use any type of VPN while working. Work according to the rules and stay connected to our Telegram channel ✅`;
+                        const welcomeMessage = `Welcome!\n🔥\nAssalamu Alaikum, I am paying honestly. If you work according to the rules, you will get 100% payment, InshaAllah 🔥...`;
                         showAlert(welcomeMessage);
                         sessionStorage.setItem('welcomeShown', 'true');
                     }
@@ -227,7 +230,7 @@
                     const defaultUserData = {
                         uid: currentUser.uid,
                         name: currentUser.displayName || document.getElementById('signup-name')?.value || `User${currentUser.uid.substring(0,5)}`,
-                        email: currentUser.email,
+                        email: currentUser.email, // Can be null for Telegram users
                         balance: initialBalance, referralCode: ownReferralCode, referredBy: referralCodeFromInput || null,
                         lastNotificationCheck: new Date(),
                         createdAt: serverTimestamp(),
@@ -283,7 +286,7 @@
             document.getElementById('min-withdrawal-info').textContent = `${appConfig.minWithdrawal || 5000} Coins`;
             document.getElementById('coin-value-info').textContent = `${appConfig.coinValueCoins || 1000} Coins = ৳${appConfig.coinValueTaka || 100}`;
             document.getElementById('profile-name').textContent = userData.name || 'No Name';
-            document.getElementById('profile-email').textContent = userData.email || 'No Email';
+            document.getElementById('profile-email').textContent = userData.email || 'N/A (Telegram User)';
             document.getElementById('referral-code').textContent = userData.referralCode || '...';
             const withdrawMethodSelect = document.getElementById('withdraw-method');
             withdrawMethodSelect.innerHTML = '';
@@ -342,6 +345,7 @@
             document.getElementById('show-login').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('signup-view').classList.add('hidden'); document.getElementById('login-view').classList.remove('hidden'); });
             document.getElementById('signup-btn').addEventListener('click', handleSignup);
             document.getElementById('login-btn').addEventListener('click', handleLogin);
+            document.getElementById('telegram-login-btn').addEventListener('click', handleTelegramAuth);
         }
 
         function setupAppEventListeners() {
