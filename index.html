@@ -69,9 +69,87 @@
     </div>
 
     <div id="app-container" class="min-h-screen flex-col main-page">
-        <header class="flex items-center justify-between p-4 sticky top-0 bg-opacity-80 backdrop-blur-md z-10 dark-bg"></header>
-        <main class="flex-grow pb-16"></main>
-        <nav class="bottom-nav sticky bottom-0 grid grid-cols-5 items-center text-center py-2 card-bg"></nav>
+        <header class="flex items-center justify-between p-4 sticky top-0 bg-opacity-80 backdrop-blur-md z-10 dark-bg">
+            <h1 class="text-xl font-bold">Daily earn money Pro</h1>
+            <div class="flex items-center space-x-4">
+                <div id="notification-bell" class="relative cursor-pointer">
+                    <i data-lucide="bell" class="w-6 h-6"></i>
+                    <div id="notification-dot" class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" style="display: none;"></div>
+                </div>
+                <img id="header-profile-img" src="https://placehold.co/40x40/1e1e1e/ff8c00?text=U" class="w-8 h-8 rounded-full cursor-pointer" onclick="navigateTo('profile-page')">
+            </div>
+        </header>
+
+        <main class="flex-grow pb-16">
+            <div id="home-page" class="p-4 space-y-6 sub-page">
+                <div class="text-left"><p class="text-gray-400">Hello,</p><h2 id="user-greeting" class="text-2xl font-bold">User Name</h2></div>
+                <div class="gradient-card p-5 rounded-xl text-white shadow-lg space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div><p class="text-sm opacity-80">Total Balance</p><p class="text-3xl font-bold"><span id="coin-balance">0</span> Coins</p><p class="font-semibold text-lg">≈ ৳<span id="taka-balance">0.00</span></p></div>
+                        <button onclick="navigateTo('wallet-page')" class="bg-white/20 hover:bg-white/30 font-bold py-2 px-4 rounded-lg flex items-center space-x-2"><i data-lucide="send" class="w-5 h-5"></i><span>Withdraw</span></button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="card-bg p-4 rounded-lg flex items-center space-x-3"><i data-lucide="award" class="w-8 h-8 text-accent"></i><div><p class="text-sm text-gray-400">Today's Coins</p><p id="today-coins" class="text-lg font-bold">0</p></div></div>
+                    <div class="card-bg p-4 rounded-lg flex items-center space-x-3"><i data-lucide="users" class="w-8 h-8 text-accent"></i><div><p class="text-sm text-gray-400">Total Referrals</p><p id="referral-count" class="text-lg font-bold">0</p></div></div>
+                </div>
+                <div><h3 class="text-lg font-semibold mb-3">Start Earning</h3><div class="card-bg p-4 rounded-lg flex justify-between items-center cursor-pointer" onclick="navigateTo('tasks-page')"><div><h4 class="font-bold">Go to Task Zone</h4><p class="text-sm text-gray-400">Complete tasks and earn more coins!</p></div><i data-lucide="arrow-right" class="w-6 h-6 text-accent"></i></div></div>
+            </div>
+            <div id="tasks-page" class="p-4 space-y-6 sub-page">
+                 <div class="flex justify-between items-center"><div><h2 class="text-xl font-bold">Earning Zone</h2><p class="text-sm text-gray-400 mb-4">Complete tasks to get rewards.</p></div><p class="text-sm text-gray-400">Tasks Left: <span id="tasks-left-count">...</span></p></div>
+                <div class="space-y-3">
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">📅</span><div><h3 class="font-semibold">Daily Check-in</h3><p class="text-xs text-gray-400">Get your daily bonus!</p></div></div><button id="daily-checkin-btn" class="bg-green-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn">Check-in</button></div>
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">🎡</span><div><h3 class="font-semibold">Spin Wheel</h3><p class="text-xs text-gray-400">Spin to win coins.</p></div></div><button id="spin-btn" class="bg-purple-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleInteractiveTask('spin')">Spin</button></div>
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">🎁</span><div><h3 class="font-semibold">Scratch & Win</h3><p class="text-xs text-gray-400">Scratch for a surprise.</p></div></div><button id="scratch-btn" class="bg-pink-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleInteractiveTask('scratch')">Scratch</button></div>
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">🔗</span><div><h3 class="font-semibold">Visit & Earn</h3><p class="text-xs text-gray-400">Visit a site to get coins.</p></div></div><button class="bg-teal-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleDirectLinkTask()">Visit</button></div>
+                    <div class="my-4 border-t border-gray-700"></div><h3 class="text-lg font-semibold text-center text-gray-400">Ad Tasks</h3>
+                    <div class="bg-orange-500 p-3 rounded-lg flex items-center justify-between text-black"><div class="flex items-center space-x-3"><span class="text-3xl">🤩</span><div><h3 class="font-bold">Watch Short Ad</h3><p class="text-xs font-medium">Rewarded Interstitial</p></div></div><button class="bg-white text-orange-500 font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleAdTask('interstitial')">Claim</button></div>
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">😎</span><div><h3 class="font-semibold">Click for Reward</h3><p class="text-xs text-gray-400">Rewarded Popup</p></div></div><button class="bg-white text-black font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleAdTask('popup')">Claim</button></div>
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">👀</span><div><h3 class="font-semibold">Watch a Video</h3><p class="text-xs text-gray-400">In-App Interstitial</p></div></div><button class="bg-gray-700 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleAdTask('inApp')">Start</button></div>
+                    <div class="card-bg p-3 rounded-lg flex items-center justify-between"><div class="flex items-center space-x-3"><span class="text-3xl">🎮</span><div><h3 class="font-semibold">Play Mini App</h3><p class="text-xs text-gray-400">Get a big reward!</p></div></div><button class="bg-blue-500 text-white font-bold px-6 py-2 rounded-lg text-sm btn" onclick="handleAdTask('miniApp')">Play</button></div>
+                </div>
+            </div>
+            <div id="wallet-page" class="p-4 space-y-6 sub-page">
+                <h2 class="text-xl font-bold text-center">My Wallet</h2>
+                <div class="card-bg p-4 rounded-lg">
+                    <h3 class="font-semibold mb-3">Withdraw Earnings</h3>
+                    <p class="text-sm text-gray-400 mb-1">Current Balance: <span class="font-bold text-accent"><span id="wallet-coin-balance">0</span> Coins</span></p>
+                    <p class="text-sm text-gray-400 mb-2">Minimum Withdrawal: <span id="min-withdrawal-info">...</span></p>
+                    <p class="text-sm text-yellow-400 mb-2">Note: You need at least 15 referrals to be able to withdraw.</p>
+                    <p class="text-sm text-gray-400 mb-4 font-semibold" id="coin-value-info">...</p>
+                    <input id="withdraw-amount" type="number" placeholder="Enter coin amount" class="w-full p-3 rounded-lg input-field mb-3">
+                    <select id="withdraw-method" class="w-full p-3 rounded-lg input-field mb-3"></select>
+                    <div id="payment-details-container"></div>
+                    <button id="withdraw-btn" class="w-full p-3 rounded-lg btn-accent mt-3">Request Withdrawal</button>
+                </div>
+                <div><h3 class="text-lg font-semibold mb-3">Withdrawal History</h3><div id="withdrawal-history-list" class="space-y-3"></div></div>
+            </div>
+            <div id="refer-page" class="p-4 space-y-6 sub-page">
+                <h2 class="text-xl font-bold text-center">Refer & Earn</h2>
+                <div class="card-bg p-6 rounded-lg text-center">
+                    <p class="text-gray-400 mb-2">Your Referral Code</p>
+                    <div class="bg-gray-800 p-3 rounded-lg flex items-center justify-center mb-4"><span id="referral-code" class="text-2xl font-bold tracking-widest">LOADING...</span><button id="copy-code-btn" class="ml-4"><i data-lucide="copy" class="w-6 h-6 text-gray-400"></i></button></div>
+                    <p class="text-sm text-gray-300">Share your code with your friends.</p>
+                </div>
+                <button id="share-btn" class="w-full p-3 rounded-lg btn-accent">Share Your Referral Link</button>
+            </div>
+            <div id="profile-page" class="p-4 space-y-6 sub-page">
+                <h2 class="text-xl font-bold text-center mb-4">Profile</h2>
+                <div class="flex flex-col items-center"><img id="profile-page-img" src="https://placehold.co/100x100/1e1e1e/ff8c00?text=U" class="w-24 h-24 rounded-full mb-2"><h2 id="profile-name" class="text-xl font-bold">User Name</h2><p id="profile-email" class="text-gray-400">user@email.com</p></div>
+                <button id="logout-btn" class="w-full mt-6 p-3 rounded-lg bg-red-600 text-white font-bold">Logout</button>
+            </div>
+            <div id="notifications-page" class="p-4 space-y-4 sub-page">
+                <h2 class="text-xl font-bold text-center">Notifications</h2><div id="notifications-list" class="space-y-3"></div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav sticky bottom-0 grid grid-cols-5 items-center text-center py-2 card-bg">
+             <a href="#" class="nav-link" data-page="home-page"><i data-lucide="home" class="mx-auto w-6 h-6"></i><span class="text-xs">Home</span></a>
+            <a href="#" class="nav-link" data-page="tasks-page"><i data-lucide="list-checks" class="mx-auto w-6 h-6"></i><span class="text-xs">Tasks</span></a>
+            <a href="#" class="nav-link" data-page="refer-page"><i data-lucide="users" class="mx-auto w-6 h-6"></i><span class="text-xs">Refer</span></a>
+            <a href="#" class="nav-link" data-page="wallet-page"><i data-lucide="wallet" class="mx-auto w-6 h-6"></i><span class="text-xs">Wallet</span></a>
+            <a href="#" class="nav-link" data-page="profile-page"><i data-lucide="user" class="mx-auto w-6 h-6"></i><span class="text-xs">Profile</span></a>
+        </nav>
     </div>
     
     <div id="custom-alert" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -114,11 +192,8 @@
                 lucide.createIcons();
                 
                 if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
-                    console.log("Telegram Web App detected. Attempting auto-login.");
-                    loader.style.display = 'flex';
                     handleTelegramAuth();
                 } else {
-                    console.log("Not inside Telegram, using standard auth flow.");
                     checkForReferralInUrl();
                     onAuthStateChanged(auth, handleAuthStateChange);
                 }
@@ -130,19 +205,8 @@
         async function handleTelegramAuth() {
             const tg = window.Telegram.WebApp;
             tg.ready();
-
+            loader.style.display = 'flex';
             try {
-                // The Python backend is at /api/bot. We will create a new endpoint for auth.
-                // Vercel serverless functions are stateless. We can make a new file `api/auth_tg.py`.
-                // For simplicity, let's assume the bot code handles this.
-                // The bot code needs to be an HTTP server to create a token.
-                // Our current `api/bot.py` IS an HTTP server. We can add a new route.
-                // Let's modify the JS to call the webhook URL with special data.
-                
-                // This will POST to our Vercel function at /api/bot
-                // The python code will see it's not a telegram update and handle it.
-                // Let's create a new file `api/auth.py` for clarity.
-                // (Assuming you have created api/auth.py as per instructions)
                 const response = await fetch('/api/auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -151,14 +215,13 @@
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to get auth token from server.');
+                    throw new Error(errorData.error || 'Failed to get auth token.');
                 }
 
                 const { token } = await response.json();
-
                 if (token) {
                     await signInWithCustomToken(auth, token);
-                    // onAuthStateChanged will be triggered automatically now
+                    // onAuthStateChanged will now trigger with the user
                 } else {
                     throw new Error('Token not received from server.');
                 }
@@ -201,8 +264,8 @@
                     showMainPage('app-container');
                     navigateTo('home-page');
                     
-                    const welcomeMessage = `Welcome!\n🔥\nAssalamu Alaikum, I am paying honestly. If you work according to the rules, you will get 100% payment, InshaAllah 🔥\n\n⚡ Joint Bonus: 30 Taka\n💸 Per Referral: 40 Taka\n💰 Per Ad: 5 Taka\n💖 Opportunity to watch 10 ads every day\n♨️ No need to invest on this site, you can earn completely free, thank you.\n\n📌 100% payment guarantee\n😊 Bkash, Nagad\n\n~ Do not use any type of VPN while working. Work according to the rules and stay connected to our Telegram channel ✅`;
                     if(!sessionStorage.getItem('welcomeShown')) {
+                        const welcomeMessage = `Welcome!\n🔥\nAssalamu Alaikum, I am paying honestly. If you work according to the rules, you will get 100% payment, InshaAllah 🔥\n\n⚡ Joint Bonus: 30 Taka\n💸 Per Referral: 40 Taka\n💰 Per Ad: 5 Taka\n💖 Opportunity to watch 10 ads every day\n♨️ No need to invest on this site, you can earn completely free, thank you.\n\n📌 100% payment guarantee\n😊 Bkash, Nagad\n\n~ Do not use any type of VPN while working. Work according to the rules and stay connected to our Telegram channel ✅`;
                         showAlert(welcomeMessage);
                         sessionStorage.setItem('welcomeShown', 'true');
                     }
@@ -268,9 +331,14 @@
             try {
                 const configSnap = await getDoc(configRef);
                 appConfig = configSnap.exists() ? configSnap.data() : { 
-                    minWithdrawal: 5000, paymentMethods: ["BKash", "Nagad", "Rocket"], 
-                    dailyTaskLimit: 10, coinValueCoins: 1000, coinValueTaka: 100,
-                    directLinkUrl: "https://example.com", adPopupEnabled: false, adPopupScriptUrl: ""
+                    minWithdrawal: 5000, 
+                    paymentMethods: ["BKash", "Nagad", "Rocket"], 
+                    dailyTaskLimit: 10, 
+                    coinValueCoins: 1000, 
+                    coinValueTaka: 100,
+                    directLinkUrl: "https://example.com",
+                    adPopupEnabled: false,
+                    adPopupScriptUrl: ""
                 };
             } catch (error) { 
                 console.error("Error fetching app config:", error);
