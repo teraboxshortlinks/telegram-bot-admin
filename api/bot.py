@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_FALLBACK_TOKEN")
-WEB_APP_URL = "https://onlinetakaincome.vercel.app/" # আপনার আসল Vercel URL
+WEB_APP_URL = "https://telegram-bot-admin-837p.vercel.app/" # আপনার আসল Vercel URL
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
