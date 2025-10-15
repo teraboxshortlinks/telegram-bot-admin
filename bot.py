@@ -1,18 +1,15 @@
 import os
 import logging
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler
 import json
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-# লগিং চালু করুন
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# --- অনুগ্রহ করে এই অংশগুলো পরিবর্তন করুন ---
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_FALLBACK_TOKEN")
-WEB_APP_URL = "https://onlinetakaincome.vercel.app/"
-# ------------------------------------------
+WEB_APP_URL = "https://onlinetakaincome.vercel.app/" # আপনার আসল Vercel URL
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
@@ -32,10 +29,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 async def handle_update(update_data):
-    """ gelen güncellemeyi işler """
     application = Application.builder().token(BOT_TOKEN).build()
     application.add_handler(CommandHandler("start", start))
-
     update = Update.de_json(update_data, application.bot)
     await application.process_update(update)
 
